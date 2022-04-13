@@ -1,50 +1,92 @@
-import React from 'react';
-import {
-    useTrackContext,
-    addTrack,
-    removeTrack,
-    clearAll
-  } from '../contexts/TrackContext';
+import React, {useState} from 'react';
 
 
-const Track = props => {
+function Track(props) {
 
-    const { items, dispatch } = useTrackContext();
+    let durasi_menit = Number((props.duration/60000).toFixed(0));
+    let durasi_detik = Number(((props.duration%60000)/1000).toFixed(0));
+    if (durasi_detik<10) durasi_detik = `0${durasi_detik}`;
 
-    const handleClick = () => {
-        dispatch(addTrack(props.data));
-        console.log(items.includes( item => { return item.id === props.data.id}));
-        // console.log("Item ID: " + props.data.id);
-        // console.log("Props data ID: " + props.data.id);
+    const [isfav, set_isfav] = useState(
+        (props.fav_tracks.filter( item => { return item.id === props.data.id}).length === 0) ? false : true
+    );
+
+    const doFav = () => {
+        if (props.fav_tracks.filter( item => { return item.id === props.data.id}).length === 0){
+            props.set_fav_tracks([...props.fav_tracks, props.data]);
+        }
+        else {
+            let item = props.fav_tracks.filter( item => { return item.id === props.data.id})[0];
+            let index = props.fav_tracks.indexOf(item);
+            const copy = [...props.fav_tracks];
+            copy.splice(index, 1);
+            props.set_fav_tracks(copy);
+        }
+        set_isfav(!isfav);
+        console.log("Is Fav?: " + isfav);
+      
     }
 
-    const Heart = () => {
-        if(items.includes( item => { return item.id === props.data.id})){
-            return (
-                <div className="">
-                    <i className="fa fa-heart"></i>
-                </div>
-            )
+
+    function Heart() {
+        if(isfav) {
+          return (
+            <div className="cursor-pointer"
+            // onClick= {() => {doFav()}}
+          >
+              <i className="text-xl text-red-500 fas fa-heart"></i>
+            </div>
+          )
         }
-        else return "Not fav";;
+        else {
+          return (
+            <div className="cursor-pointer"
+            // onClick= {() => {doFav()}}
+          >
+              <i className="text-xl text-gray-500 far fa-heart hover:text-gray-100"></i>
+            </div>
+
+          )
+        }
     }
 
     return (
-        <>
+    <div
+        href="#"
+        onClick= {() => {
+            props.set_view("trackdetail");
+            props.set_track_id(props.data.id);
+          }}
+        className="cursor-pointer flex flex-wrap rounded-lg hover:bg-sptf_card_hover">
 
-        <div onClick= {() => {handleClick()}}
-        className="bg-sptf_card px-5 py-5 rounded w-1/5 mr-4 mb-4 cursor-pointer hover:bg-sptf_card_hover">
-            <img src={props.image_url} title={props.album_name} alt="{props.album_name}" className="object-cover rounded h-40 w-full"/>
-            <p className="text-base mt-2 mb-1 font-bold text-gray-100">{props.track_title}</p>
-            <div className="">
-                <p className="text-sm text-gray-300">{props.artist_name}</p>
+        <div className="w-16 pb-2 pr-2 pl-2 pt-4 text-center">
+          {/*<Heart/>*/}
+        </div>
+
+        <div className="p-2">
+            <img src={props.image_url} title={props.album_name} alt="{props.album_name}" className="object-cover w-10 h-10"/>
+        </div>
+
+        <div className="w-80 p-2">
+            <div className="-mb-1">
+                <a className="text-white">{props.track_title}</a>
             </div>
-            <Heart/>
+            <div>
+                <a className="text-gray-400 text-sm">{props.artist_name}</a>
+            </div>
 
         </div>
         
+        <div className="w-80 p-2">
+            <a className="text-gray-300">{props.album_name}</a>
+        </div>
 
-        </>
+        <div className="w-24 p-2">
+            <a className="text-gray-300">{durasi_menit}:{durasi_detik}</a>
+        </div>
+
+    </div>
+
     );
 }
 
