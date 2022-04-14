@@ -5,10 +5,7 @@ import PlaylistPage from '../Playlist';
 import SearchPage from '../Search';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {
-    updateToken,
-    selectToken,
-  } from '../../../redux/tokenSlice';
+import { selectToken } from '../../../redux/tokenSlice';
 
 function Layout() {
 
@@ -18,7 +15,6 @@ function Layout() {
 
   const [view, set_view] = useState("home");
 
-  const [user, set_user] = useState(null);
   const [fav_tracks, set_fav_tracks] = useState([]);
   const [track_id, set_track_id] = useState(null);
 
@@ -27,10 +23,7 @@ function Layout() {
     name: "home",
     text: "Home",
     icon: "fa-home",
-    page: <Home
-            user={user}
-            set_user={set_user}
-          />
+    page: <Home/>
     },
 
   ];
@@ -40,10 +33,7 @@ function Layout() {
           name: "home",
           text: "Home",
           icon: "fa-home",
-          page: <Home
-                    user={user}
-                    set_user={set_user}
-                />
+          page: <Home/>
           },
           {
           name: "search",
@@ -59,7 +49,6 @@ function Layout() {
             text: "Playlists",
             icon: "fa-headphones-alt",
             page: <PlaylistPage
-                    user={user}
                     set_fav_tracks={set_fav_tracks}
                     fav_tracks={fav_tracks}
                     track_id={track_id}
