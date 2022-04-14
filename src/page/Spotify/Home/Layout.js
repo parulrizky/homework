@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import Menu from '../../../components/Menu';
 import Home from './Home';
-import Favorite from '../Favorite/Favorite';
 import PlaylistPage from '../Playlist';
 import SearchPage from '../Search';
 
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    updateToken,
+    selectToken,
+  } from '../../../redux/tokenSlice';
+
 function Layout() {
+
+  const dispatch = useDispatch();
+  const token = useSelector(selectToken);
+
 
   const [view, set_view] = useState("home");
 
-  const [token, set_token] = useState(null);
   const [user, set_user] = useState(null);
   const [fav_tracks, set_fav_tracks] = useState([]);
   const [track_id, set_track_id] = useState(null);
@@ -20,8 +28,6 @@ function Layout() {
     text: "Home",
     icon: "fa-home",
     page: <Home
-            token={token}
-            set_token={set_token}
             user={user}
             set_user={set_user}
           />
@@ -35,8 +41,6 @@ function Layout() {
           text: "Home",
           icon: "fa-home",
           page: <Home
-                    token={token}
-                    set_token={set_token}
                     user={user}
                     set_user={set_user}
                 />
@@ -46,35 +50,22 @@ function Layout() {
           text: "Search",
           icon: "fa-search",
           page: <SearchPage
-                    token={token}
                     fav_tracks={fav_tracks}
                     set_fav_tracks={set_fav_tracks}
                 />
           },
-      // {
-      // name: "favorite",
-      // text: "Favorite",
-      // icon: "fa-heart",
-      // page: <Favorite
-      //         fav_tracks={fav_tracks}
-      //         set_fav_tracks={set_fav_tracks}
-      //         track_id={track_id}
-      //         set_track_id={set_track_id}
-      //       />
-      // },
-            {
+          {
             name: "playlists",
             text: "Playlists",
             icon: "fa-headphones-alt",
             page: <PlaylistPage
-                    token={token}
                     user={user}
                     set_fav_tracks={set_fav_tracks}
                     fav_tracks={fav_tracks}
                     track_id={track_id}
                     set_track_id={set_track_id}
                   />
-            },
+          },
         ];
     }
 
@@ -88,7 +79,6 @@ function Layout() {
 
       <div className="p-5 w-56 fixed object-left object-top h-screen bg-sptf_black">
         <Menu
-          token={token}
           view={view}
           set_view={set_view}
           menu_list={menu_list}

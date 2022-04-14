@@ -1,8 +1,18 @@
 import React,{useState,useEffect} from 'react';
 import AddToPlaylist from './AddToPlaylist';
+
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    updateToken,
+    selectToken,
+  } from '../../../redux/tokenSlice';
+
 const axios = require('axios');
 
 function TrackDetail(props) {
+
+    const dispatch = useDispatch();
+    const token = useSelector(selectToken);
 
     const [selected_track, set_selected_track] = useState([]);
     const [is_loading, set_is_loading] = useState(true);
@@ -12,7 +22,7 @@ function TrackDetail(props) {
         try {
             await axios.get("https://api.spotify.com/v1/tracks/" + props.track_id, {
             headers: {
-                'Authorization': 'Bearer ' + props.token
+                'Authorization': 'Bearer ' + token
             },
             })
             .then(res => {
@@ -83,7 +93,7 @@ function TrackDetail(props) {
 
                 {(show_add_modal) && (
                     <AddToPlaylist
-                        token={props.token}
+                        token={token}
                         selected_track={selected_track}
                         set_show_add_modal={set_show_add_modal}
                     />
