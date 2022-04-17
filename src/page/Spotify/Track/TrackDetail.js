@@ -1,31 +1,14 @@
-import React,{useState,useEffect} from 'react';
+import React,{ useState } from 'react';
 import AddToPlaylist from './AddToPlaylist';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { selectToken } from '../../../redux/tokenSlice';
+import { useSelector } from 'react-redux';
 import { selectSelectedTrack } from '../../../redux/selectedTrackSlice';
 
-const axios = require('axios');
+function TrackDetail() {
 
-function TrackDetail(props) {
-
-    const dispatch = useDispatch();
-    const token = useSelector(selectToken);
     const selecedTrack = useSelector(selectSelectedTrack);
 
     const [show_add_modal, set_show_add_modal] = useState(false);
-
-    function TesTombol(){
-        return(
-            <a
-                onClick={() => {
-                    console.log("Selected track:")
-                    console.log(selectedtrack);
-                }}
-                className="cursor-pointer text-white bg-blue-500 p-2 rounded-lg">
-            Tes tombol</a>
-        )
-    }
 
     function PlayButton(){
 
@@ -55,9 +38,7 @@ function TrackDetail(props) {
         );
     }
 
-
-    function Page(){
-        return(
+    return(
         <>
             {(show_add_modal) && (
                 <AddToPlaylist
@@ -83,15 +64,6 @@ function TrackDetail(props) {
             <div className="flex flex-wrap pl-5 mt-5">
                 <PlayButton/><AddToPlaylistButton/>
             </div>
-
-        </>
-        )
-    }
-
-    return (
-        <>
-            <Page/>
-            {/*<TesTombol/>*/}
         </>
     );
 }
